@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponse
 import json
 import datetime
 from .models import *
@@ -11,10 +11,16 @@ def store(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    products = Product.objects.all
+    products = Product.objects.all()
 
     context = {'products': products, 'cartItems': cartItems}
     return render(request, 'store/store.html', context)
+
+
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    context = {'product': product}
+    return render(request, 'store/detail.html', context)
 
 
 def cart(request):
